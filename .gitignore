@@ -1,0 +1,15 @@
+# Jetbrains files
+.idea
+
+# OS X files
+.DS_STORE
+
+# User specific files
+/bin/
+/data/
+/pkg/
+config.yaml
+
+# Vendor code
+.glide/
+/vendor/

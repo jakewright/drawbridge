@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  drawbridge:
+    build: .
+    volumes:
+      - .:/go/src/drawbridge
+      - /go/pkg
+    ports:
+      - 5005:80

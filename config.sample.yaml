@@ -1,0 +1,6 @@
+apis:
+  reqres:
+      name: "JSONPlaceholder"
+      prefix: "typicode"
+      upstream_url: "http://jsonplaceholder.typicode.com"
+
