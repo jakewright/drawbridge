@@ -3,10 +3,9 @@ package main
 import (
     "drawbridge/config"
     "drawbridge/proxy"
+    "drawbridge/router"
     "drawbridge/utils"
     "drawbridge/middleware"
-    "github.com/gorilla/mux"
-    "github.com/urfave/negroni"
     "log"
     "net/http"
     "os"
@@ -15,15 +14,11 @@ import (
 
 // The function that will be called when the program is run
 func main() {
-    // Create instances of mux and negroni
-    router := mux.NewRouter()
-    negroni := negroni.New()
+    routerFactory := router.NewRouterFactory()
 
     // Create middleware
     logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
-
-    // Add middleware to the negroni stack
-    negroni.UseFunc(logger)
+    routerFactory.AddMiddleware(logger)
 
     configuration := config.LoadConfig()
 
@@ -41,13 +36,9 @@ func main() {
         // request to upstreamUrl/prefix/path instead of upstreamUrl/path.
         handler := http.StripPrefix(prefix, proxy)
 
-        // Add a handler to the router for the prefix
-        router.PathPrefix(prefix).Handler(handler)
+        // Handle /prefix/* with the proxy. The empty string in the first argument means handle all methods.
+        routerFactory.Handle("", prefix + "*", handler)
     }
 
-    // The router must be the last middleware in the chain
-    negroni.UseHandler(router)
-
-    // Start the web server
-    log.Fatal(http.ListenAndServe(":80", negroni))
+    log.Fatal(http.ListenAndServe(":80", routerFactory.Build()))
 }
