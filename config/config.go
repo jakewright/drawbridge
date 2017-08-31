@@ -10,7 +10,7 @@ type Configuration struct {
     Apis map[string]domain.Api
 }
 
-func GetApiConfig() (c Configuration) {
+func LoadConfig() (c Configuration) {
     // Read the configuration file
     b, err := ioutil.ReadFile("/config/config.yaml")
     if err != nil { panic(err) }

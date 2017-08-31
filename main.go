@@ -25,10 +25,10 @@ func main() {
     // Add middleware to the negroni stack
     negroni.UseFunc(logger)
 
-    apiConfig := config.GetApiConfig()
+    configuration := config.LoadConfig()
 
     // Loop over all APIs
-    for _, apiDefinition := range apiConfig.Apis {
+    for _, apiDefinition := range configuration.Apis {
         log.Printf("%v", apiDefinition)
 
         // Add surrounding slashes to the prefix
