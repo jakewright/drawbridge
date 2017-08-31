@@ -3,6 +3,7 @@ version: '3'
 services:
   drawbridge:
     build: .
+    image: jakewright/drawbridge
     volumes:
       - ./config.yaml:/config/config.yaml
       - .:/go/src/drawbridge
