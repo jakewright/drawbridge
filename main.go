@@ -12,9 +12,8 @@ import (
     "os"
 )
 
-/**
- * The function that will be called when the program is run
- */
+
+// The function that will be called when the program is run
 func main() {
     // Create instances of mux and negroni
     router := mux.NewRouter()
