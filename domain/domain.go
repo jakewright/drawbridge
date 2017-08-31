@@ -8,6 +8,7 @@ type Api struct {
     Name string
     Prefix string
     UpstreamUrl *Url `yaml:"upstream_url"`
+    AllowCrossOrigin bool `yaml:"allow_cross_origin"`
 }
 
 type Url struct {

@@ -30,7 +30,7 @@ func main() {
         prefix := utils.AddSlashes(apiDefinition.Prefix)
 
         // Create a new proxy
-        proxy := proxy.New(apiDefinition.UpstreamUrl)
+        proxy := proxy.New(&apiDefinition)
 
         // Strip the prefix before passing to the proxy. Without this, the proxy will make a
         // request to upstreamUrl/prefix/path instead of upstreamUrl/path.

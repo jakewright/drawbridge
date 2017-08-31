@@ -8,14 +8,20 @@ import (
 )
 
 type Proxy struct {
+    api *domain.Api
     reverseProxy *httputil.ReverseProxy
 }
 
 func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    if p.api.AllowCrossOrigin {
+        w.Header().Set("Access-Control-Allow-Origin", "*")
+    }
+
     p.reverseProxy.ServeHTTP(w, r)
 }
 
-func New(target *domain.Url) *Proxy {
+func New(api *domain.Api) *Proxy {
+    target := api.UpstreamUrl
     reverseProxy := httputil.ReverseProxy{
         Director: func(req *http.Request) {
             req.URL.Scheme = target.Scheme
@@ -25,5 +31,5 @@ func New(target *domain.Url) *Proxy {
         },
     }
 
-    return &Proxy{reverseProxy: &reverseProxy}
+    return &Proxy{api: api, reverseProxy: &reverseProxy}
 }
