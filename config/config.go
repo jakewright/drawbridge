@@ -12,7 +12,7 @@ type Configuration struct {
 
 func GetApiConfig() (c Configuration) {
     // Read the configuration file
-    b, err := ioutil.ReadFile("config.yaml")
+    b, err := ioutil.ReadFile("/config/config.yaml")
     if err != nil { panic(err) }
 
     // Unmarshal the YAML into the Configuration struct

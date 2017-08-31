@@ -4,6 +4,7 @@ services:
   drawbridge:
     build: .
     volumes:
+      - ./config.yaml:/config/config.yaml
       - .:/go/src/drawbridge
       - /go/pkg
     ports:
