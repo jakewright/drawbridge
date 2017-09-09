@@ -11,7 +11,6 @@ import (
     "os"
 )
 
-
 // The function that will be called when the program is run
 func main() {
     routerFactory := router.NewRouterFactory()
@@ -40,5 +39,8 @@ func main() {
         routerFactory.Handle("", prefix + "*", handler)
     }
 
-    log.Fatal(http.ListenAndServe(":80", routerFactory.Build()))
+    port := os.Getenv("PORT")
+    if port == "" { port = "80" }
+
+    log.Fatal(http.ListenAndServe(":" + port, routerFactory.Build()))
 }
