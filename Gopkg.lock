@@ -2,28 +2,28 @@
 
 
 [[projects]]
-  digest = "1:c79fb010be38a59d657c48c6ba1d003a8aa651fa56b579d959d74573b7dff8e1"
-  name = "github.com/gorilla/context"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
-  version = "v1.1.1"
-
-[[projects]]
-  digest = "1:dc10acb30ea3555604b64a0463d86e5901fc7d855299b96ab8fb0fae57ad8b0e"
+  digest = "1:d5f97fc268267ec1b61c3453058c738246fc3e746f14b1ae25161513b7367b0c"
   name = "github.com/gorilla/mux"
   packages = ["."]
   pruneopts = "UT"
-  revision = "bcd8bc72b08df0f70df986b97f95590779502d31"
-  version = "v1.4.0"
+  revision = "c5c6c98bc25355028a63748a498942a6398ccd22"
+  version = "v1.7.1"
 
 [[projects]]
-  digest = "1:f5c90c63522dfbd29d00558d3a12e4223c5b31ae3f1f174fe2068f267502c38b"
+  branch = "master"
+  digest = "1:04f06301b8b0c84bd49e56a5825cd1fcef33a438d8124cef8101b9405db81d4a"
+  name = "github.com/jakewright/muxinator"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "91b8697e7956bf0d502bb803b770bc5e7fe2d616"
+
+[[projects]]
+  digest = "1:d688f4ad71b5dfad95c2d74cb0feac09f8f3c32ae5cecc078230dbdeece39e53"
   name = "github.com/urfave/negroni"
   packages = ["."]
   pruneopts = "UT"
-  revision = "fde5e16d32adc7ad637e9cd9ad21d4ebc6192535"
-  version = "v0.2.0"
+  revision = "c6a59be0ce122566695fbd5e48a77f8f10c8a63a"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:6570992c02a2137a20be83990a979b6fe892e20ecdc6b756449989b2a7efb8ae"
@@ -36,8 +36,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/gorilla/mux",
-    "github.com/urfave/negroni",
+    "github.com/jakewright/muxinator",
     "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"
