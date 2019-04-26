@@ -14,13 +14,17 @@ import (
 
 // The function that will be called when the program is run
 func main() {
+	if len(os.Args) < 2 {
+		log.Fatalf("Usage: drawbridge /path/to/config.yml")
+	}
+
 	router := muxinator.NewRouter()
 
 	// Create middleware
 	logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
 	router.AddMiddleware(logger)
 
-	c, err := config.Load("/config/config.yaml")
+	c, err := config.Load(os.Args[1])
 	if err != nil {
 		log.Panicf("Failed to load config: %v", err)
 	}
