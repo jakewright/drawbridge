@@ -1,36 +1,38 @@
 package domain
 
 import (
-    "net/url"
+	"net/url"
 )
 
 type Api struct {
-    Name string
-    Prefix string
-    UpstreamUrl *Url `yaml:"upstream_url"`
-    AllowCrossOrigin bool `yaml:"allow_cross_origin"`
+	Name             string
+	Prefix           string
+	UpstreamUrl      *Url `yaml:"upstream_url"`
+	AllowCrossOrigin bool `yaml:"allow_cross_origin"`
 }
 
 type Url struct {
-    *url.URL
+	*url.URL
 }
 
 // Tell the parser how to unmarshal a string to type Url
 func (u *Url) UnmarshalYAML(unmarshal func(interface{}) error) error {
-    var s string
+	var s string
 
-    // Unmarshal the field into a string
-    if err := unmarshal(&s); err != nil {
-        return err
-    }
+	// Unmarshal the field into a string
+	if err := unmarshal(&s); err != nil {
+		return err
+	}
 
-    // Parse the URL string into a url.URL type
-    target, err := url.Parse(s)
-    if err != nil { return err }
+	// Parse the URL string into a url.URL type
+	target, err := url.Parse(s)
+	if err != nil {
+		return err
+	}
 
-    // Set the anonymous field on u
-    u.URL = target
+	// Set the anonymous field on u
+	u.URL = target
 
-    // Return no errors
-    return nil
+	// Return no errors
+	return nil
 }

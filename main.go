@@ -1,46 +1,49 @@
 package main
 
 import (
-    "drawbridge/config"
-    "drawbridge/proxy"
-    "drawbridge/router"
-    "drawbridge/utils"
-    "drawbridge/middleware"
-    "log"
-    "net/http"
-    "os"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/jakewright/drawbridge/config"
+	"github.com/jakewright/drawbridge/middleware"
+	"github.com/jakewright/drawbridge/proxy"
+	"github.com/jakewright/drawbridge/router"
+	"github.com/jakewright/drawbridge/utils"
 )
 
 // The function that will be called when the program is run
 func main() {
-    routerFactory := router.NewRouterFactory()
+	routerFactory := router.NewRouterFactory()
 
-    // Create middleware
-    logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
-    routerFactory.AddMiddleware(logger)
+	// Create middleware
+	logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
+	routerFactory.AddMiddleware(logger)
 
-    configuration := config.LoadConfig()
+	configuration := config.LoadConfig()
 
-    // Loop over all APIs
-    for _, apiDefinition := range configuration.Apis {
-        log.Printf("%v", apiDefinition)
+	// Loop over all APIs
+	for _, apiDefinition := range configuration.Apis {
+		log.Printf("%v", apiDefinition)
 
-        // Add surrounding slashes to the prefix
-        prefix := utils.AddSlashes(apiDefinition.Prefix)
+		// Add surrounding slashes to the prefix
+		prefix := utils.AddSlashes(apiDefinition.Prefix)
 
-        // Create a new proxy
-        proxy := proxy.New(&apiDefinition)
+		// Create a new proxy
+		proxy := proxy.New(&apiDefinition)
 
-        // Strip the prefix before passing to the proxy. Without this, the proxy will make a
-        // request to upstreamUrl/prefix/path instead of upstreamUrl/path.
-        handler := http.StripPrefix(prefix, proxy)
+		// Strip the prefix before passing to the proxy. Without this, the proxy will make a
+		// request to upstreamUrl/prefix/path instead of upstreamUrl/path.
+		handler := http.StripPrefix(prefix, proxy)
 
-        // Handle /prefix/* with the proxy. The empty string in the first argument means handle all methods.
-        routerFactory.Handle("", prefix + "*", handler)
-    }
+		// Handle /prefix/* with the proxy. The empty string in the first argument means handle all methods.
+		routerFactory.Handle("", prefix+"*", handler)
+	}
 
-    port := os.Getenv("PORT")
-    if port == "" { port = "80" }
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
 
-    log.Fatal(http.ListenAndServe(":" + port, routerFactory.Build()))
+	log.Fatal(http.ListenAndServe(":"+port, routerFactory.Build()))
 }
