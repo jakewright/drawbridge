@@ -15,6 +15,8 @@ type Proxy struct {
 func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if p.api.AllowCrossOrigin {
         w.Header().Set("Access-Control-Allow-Origin", "*")
+        w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH")
+        w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     }
 
     p.reverseProxy.ServeHTTP(w, r)
