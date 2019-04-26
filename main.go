@@ -8,17 +8,17 @@ import (
 	"github.com/jakewright/drawbridge/config"
 	"github.com/jakewright/drawbridge/middleware"
 	"github.com/jakewright/drawbridge/proxy"
-	"github.com/jakewright/drawbridge/router"
 	"github.com/jakewright/drawbridge/utils"
+	"github.com/jakewright/muxinator"
 )
 
 // The function that will be called when the program is run
 func main() {
-	routerFactory := router.NewRouterFactory()
+	router := muxinator.NewRouter()
 
 	// Create middleware
 	logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
-	routerFactory.AddMiddleware(logger)
+	router.AddMiddleware(logger)
 
 	configuration := config.LoadConfig()
 
@@ -37,7 +37,7 @@ func main() {
 		handler := http.StripPrefix(prefix, proxy)
 
 		// Handle /prefix/* with the proxy. The empty string in the first argument means handle all methods.
-		routerFactory.Handle("", prefix+"*", handler)
+		router.Handle("", prefix+"*", handler)
 	}
 
 	port := os.Getenv("PORT")
@@ -45,5 +45,5 @@ func main() {
 		port = "80"
 	}
 
-	log.Fatal(http.ListenAndServe(":"+port, routerFactory.Build()))
+	log.Fatal(router.ListenAndServe(":" + port))
 }

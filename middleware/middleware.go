@@ -4,12 +4,11 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/jakewright/muxinator"
 )
 
-// This replicates the negroni.HandlerFunc type but decouples the code from the library
-type Middleware func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)
-
-func Log(logger *log.Logger) Middleware {
+func Log(logger *log.Logger) muxinator.Middleware {
 	return func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		start := time.Now()
 		next(w, r)
