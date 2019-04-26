@@ -1,13 +1,15 @@
 FROM golang:latest
-COPY . /go/src/drawbridge
 
-# Install Glide
-RUN curl https://glide.sh/get | sh
+RUN go get github.com/golang/dep/cmd/dep
 
-WORKDIR /go/src/drawbridge
+WORKDIR /go/src/github.com/jakewright/drawbridge
+COPY . .
 
-RUN glide install
-RUN go build -o bin/drawbridge
+RUN dep ensure
+RUN CGO_ENABLED=0 GOOS=linux go install .
 
-# Make the app run when the container is started
-CMD ["/go/src/drawbridge/bin/drawbridge"]
+FROM alpine:latest
+RUN mkdir /config
+WORKDIR /root/
+COPY --from=0 /go/bin/drawbridge .
+CMD ["./drawbridge", "/config/config.yaml"]
