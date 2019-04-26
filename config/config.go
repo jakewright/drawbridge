@@ -8,22 +8,23 @@ import (
 )
 
 type Configuration struct {
-	Apis map[string]domain.Api
+	APIs map[string]domain.Api
 }
 
-func LoadConfig() (c Configuration) {
+func Load(filename string) (*Configuration, error) {
 	// Read the configuration file
-	b, err := ioutil.ReadFile("/config/config.yaml")
+	b, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	// Unmarshal the YAML into the Configuration struct
+	var c Configuration
 	err = yaml.Unmarshal(b, &c)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	// Return the Configuration struct
-	return
+	return &c, nil
 }

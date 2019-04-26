@@ -20,21 +20,24 @@ func main() {
 	logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
 	router.AddMiddleware(logger)
 
-	configuration := config.LoadConfig()
+	c, err := config.Load("/config/config.yaml")
+	if err != nil {
+		log.Panicf("Failed to load config: %v", err)
+	}
 
 	// Loop over all APIs
-	for _, apiDefinition := range configuration.Apis {
+	for _, apiDefinition := range c.APIs {
 		log.Printf("%v", apiDefinition)
 
 		// Add surrounding slashes to the prefix
 		prefix := utils.AddSlashes(apiDefinition.Prefix)
 
 		// Create a new proxy
-		proxy := proxy.New(&apiDefinition)
+		p := proxy.New(&apiDefinition)
 
 		// Strip the prefix before passing to the proxy. Without this, the proxy will make a
 		// request to upstreamUrl/prefix/path instead of upstreamUrl/path.
-		handler := http.StripPrefix(prefix, proxy)
+		handler := http.StripPrefix(prefix, p)
 
 		// Handle /prefix/* with the proxy. The empty string in the first argument means handle all methods.
 		router.Handle("", prefix+"*", handler)
