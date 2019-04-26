@@ -9,6 +9,7 @@ import (
 
 // Configuration represents the config loaded from the YAML file
 type Configuration struct {
+	Port int
 	APIs map[string]*domain.API
 }
 

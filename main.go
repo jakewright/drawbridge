@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -47,10 +48,11 @@ func main() {
 		router.Handle("", prefix+"*", handler)
 	}
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
+	port := c.Port
+	if port == 0 {
+		port = 80
 	}
 
-	log.Fatal(router.ListenAndServe(":" + port))
+	log.Printf("Listening on port %d\n", port)
+	log.Fatal(router.ListenAndServe(fmt.Sprintf(":%d", port)))
 }
