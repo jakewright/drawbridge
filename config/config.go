@@ -7,10 +7,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Configuration represents the config loaded from the YAML file
 type Configuration struct {
-	APIs map[string]domain.Api
+	APIs map[string]*domain.API
 }
 
+// Load reads a YAML file and returns a Configuration struct
 func Load(filename string) (*Configuration, error) {
 	// Read the configuration file
 	b, err := ioutil.ReadFile(filename)

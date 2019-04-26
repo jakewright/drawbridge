@@ -1,21 +1,23 @@
 package utils
 
-import (
-	"strings"
-)
+import "strings"
 
+// SingleJoiningSlash returns the concatenation of the
+// parameters with a single "/" in between
 func SingleJoiningSlash(a, b string) string {
-	aslash := strings.HasSuffix(a, "/")
-	bslash := strings.HasPrefix(b, "/")
+	aSlash := strings.HasSuffix(a, "/")
+	bSlash := strings.HasPrefix(b, "/")
 	switch {
-	case aslash && bslash:
+	case aSlash && bSlash:
 		return a + b[1:]
-	case !aslash && !bslash:
+	case !aSlash && !bSlash:
 		return a + "/" + b
 	}
 	return a + b
 }
 
+// AddSlashes returns the string with a single slash
+// on each side
 func AddSlashes(s string) string {
 	preSlash := strings.HasPrefix(s, "/")
 	postSlash := strings.HasSuffix(s, "/")

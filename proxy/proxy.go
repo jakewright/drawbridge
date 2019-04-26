@@ -8,8 +8,10 @@ import (
 	"github.com/jakewright/drawbridge/utils"
 )
 
+// Proxy is a handler that takes an incoming request and sends it
+// to the upstream API, proxying the response back to the client.
 type Proxy struct {
-	api          *domain.Api
+	api          *domain.API
 	reverseProxy *httputil.ReverseProxy
 }
 
@@ -23,8 +25,9 @@ func (p *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	p.reverseProxy.ServeHTTP(w, r)
 }
 
-func New(api *domain.Api) *Proxy {
-	target := api.UpstreamUrl
+// New returns a Proxy struct for the given API
+func New(api *domain.API) *Proxy {
+	target := api.UpstreamURL
 	reverseProxy := httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			req.URL.Scheme = target.Scheme

@@ -8,6 +8,7 @@ import (
 	"github.com/jakewright/muxinator"
 )
 
+// Log returns a middleware that logs all requests
 func Log(logger *log.Logger) muxinator.Middleware {
 	return func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		start := time.Now()

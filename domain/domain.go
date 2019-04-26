@@ -4,19 +4,21 @@ import (
 	"net/url"
 )
 
-type Api struct {
-	Name             string
-	Prefix           string
-	UpstreamUrl      *Url `yaml:"upstream_url"`
-	AllowCrossOrigin bool `yaml:"allow_cross_origin"`
+// API represents a single upstream API to proxy requests to
+type API struct {
+	Name             string `yaml:"name"`
+	Prefix           string `yaml:"prefix"`
+	UpstreamURL      *URL   `yaml:"upstream_url"`
+	AllowCrossOrigin bool   `yaml:"allow_cross_origin"`
 }
 
-type Url struct {
+// URL wraps the net/url.URL type to provide an UnmarshalYAML function
+type URL struct {
 	*url.URL
 }
 
-// Tell the parser how to unmarshal a string to type Url
-func (u *Url) UnmarshalYAML(unmarshal func(interface{}) error) error {
+// UnmarshalYAML tells the parser how to unmarshal a string to type Url
+func (u *URL) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var s string
 
 	// Unmarshal the field into a string
