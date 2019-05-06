@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jakewright/drawbridge/domain"
 	"gotest.tools/assert"
 )
 
@@ -48,10 +47,5 @@ func newTestProxy(t *testing.T, rawURL string) *Proxy {
 	u, err := url.Parse(rawURL)
 	assert.NilError(t, err)
 
-	return New(&domain.API{
-		Name:             "",
-		Prefix:           "",
-		UpstreamURL:      &domain.URL{u},
-		AllowCrossOrigin: true,
-	})
+	return New(u, true)
 }

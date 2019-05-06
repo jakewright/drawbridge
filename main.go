@@ -1,58 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
 	"os"
 
 	"github.com/jakewright/drawbridge/config"
-	"github.com/jakewright/drawbridge/middleware"
-	"github.com/jakewright/drawbridge/proxy"
-	"github.com/jakewright/drawbridge/utils"
-	"github.com/jakewright/muxinator"
+	"github.com/jakewright/drawbridge/log"
+	"github.com/jakewright/drawbridge/server"
 )
 
-// The function that will be called when the program is run
 func main() {
 	if len(os.Args) < 2 {
 		log.Fatalf("Usage: drawbridge /path/to/config.yml")
 	}
-
-	router := muxinator.NewRouter()
-
-	// Create middleware
-	logger := middleware.Log(log.New(os.Stdout, "", log.Lshortfile))
-	router.AddMiddleware(logger)
 
 	c, err := config.Load(os.Args[1])
 	if err != nil {
 		log.Panicf("Failed to load config: %v", err)
 	}
 
-	// Loop over all APIs
-	for _, apiDefinition := range c.APIs {
-		log.Printf("%v", apiDefinition)
-
-		// Add surrounding slashes to the prefix
-		prefix := utils.AddSlashes(apiDefinition.Prefix)
-
-		// Create a new proxy
-		p := proxy.New(apiDefinition)
-
-		// Strip the prefix before passing to the proxy. Without this, the proxy will make a
-		// request to upstreamUrl/prefix/path instead of upstreamUrl/path.
-		handler := http.StripPrefix(prefix, p)
-
-		// Handle /prefix/* with the proxy. The empty string in the first argument means handle all methods.
-		router.Handle("", prefix+"*", handler)
+	if err := server.ListenAndServe(c); err != nil {
+		log.Printf("Failed to run server: %v", err)
 	}
-
-	port := c.Port
-	if port == 0 {
-		port = 80
-	}
-
-	log.Printf("Listening on port %d\n", port)
-	log.Fatal(router.ListenAndServe(fmt.Sprintf(":%d", port)))
 }
