@@ -24,11 +24,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:04f06301b8b0c84bd49e56a5825cd1fcef33a438d8124cef8101b9405db81d4a"
+  digest = "1:8384c01750f2d6af615435db2ae7a2d5e5df08617e6244a43fb2ae8f2b316d90"
   name = "github.com/jakewright/muxinator"
   packages = ["."]
   pruneopts = "UT"
-  revision = "91b8697e7956bf0d502bb803b770bc5e7fe2d616"
+  revision = "fedb92b2632178674791fe93451f72ade912bacb"
 
 [[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
@@ -47,11 +47,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:6570992c02a2137a20be83990a979b6fe892e20ecdc6b756449989b2a7efb8ae"
+  digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   pruneopts = "UT"
-  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
 
 [[projects]]
   digest = "1:a5cc901b8e54c4b73a62f97dc7c8f6c46e347c148a7a38e09b2e942c2587ba03"
