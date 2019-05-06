@@ -1,15 +1,19 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/jakewright/muxinator"
 )
 
+// Logger is an interface that the standard log package implements
+type Logger interface {
+	Printf(format string, v ...interface{})
+}
+
 // Log returns a middleware that logs all requests
-func Log(logger *log.Logger) muxinator.Middleware {
+func Log(logger Logger) muxinator.Middleware {
 	return func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		start := time.Now()
 		next(w, r)
