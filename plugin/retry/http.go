@@ -15,24 +15,26 @@ func (w *responseWriter) Header() http.Header {
 	return w.w.Header()
 }
 
-// Write proxies to the underlying ResponseWriter Write() function
+// Write appends to a byte slice ready to be flushed later
 func (w *responseWriter) Write(b []byte) (int, error) {
-	w.b = b
+	w.b = append(w.b, b...)
 	return len(b), nil
 }
 
-// WriteHeader saves the status code and then proxies
-// to the underlying ResponseWriter WriteHeader() function
+// WriteHeader saves the status code ready to be flushed later
 func (w *responseWriter) WriteHeader(statusCode int) {
 	w.s = statusCode
 }
 
-// Reset clears the headers that have been queued up for the
-// client and should be called before each retry is invoked
+// Reset clears the headers and empties the buffers.
+// It should be called before each retry is invoked.
 func (w *responseWriter) Reset() {
 	for k := range w.w.Header() {
 		w.w.Header().Del(k)
 	}
+
+	w.s = 0
+	w.b = []byte{}
 }
 
 // Flush writes the buffered content to the client
