@@ -31,16 +31,22 @@ If the drawbridge server was running at localhost:5000, http://localhost:5000/ty
 The project includes a Docker Compose file and some useful targets in the Makefile to allow you to easily set up a
 development environment.
 
-To prepare the image for development, use `make install`.
+To prepare the image for development, use `make build-image`.
 
 ```bash
-$ make install
+$ make build-image
 ```
 
 This will build the docker image and then install dependencies with the mounted volumes.
 
-Even though Glide dependencies are installed when the Docker image is built, they must be installed again when developing because the volume mount will overwrite the /vendor directory in the container.
-Notice that after running `make install`, you have a local `vendor/` directory. Please do not commit this directory to git.
+The image contains two stages: 
+- `builder` with go installed
+- `prod` with only compiled version.
+
+To build the dev image use `make build-image`.
+
+Even though `dep` dependencies are installed when the Docker image is built, they must be installed again when developing because the volume mount will overwrite the /vendor directory in the container.
+Notice that after running `make update`, you have a local `vendor/` directory. Please do not commit this directory to git.
 
 Similarly, the application must be compiled again when using the development volume mounts. This is easy using `make build`.
 Once compiled, the application can be run using `make start`.
@@ -48,7 +54,7 @@ These can be combined into `make build start`.
 A normal development workflow might look like
 
 ```Shell
-$ make install
+$ make update
 $ make build start
 $ Ctrl+c
 [make some code changes]
@@ -59,10 +65,10 @@ Where `Ctrl+c` stops the running Docker container.
 
 ### Installing new packages
 
-If, during development, you need to use a new package that has not been previously installed, use `make glide-get`.
+If, during development, you need to use a new package that has not been previously installed, use `make dep-add`.
 
 ```bash
-$ make glide-get pkg=[package name]
+$ make dep-add pkg=[package name]
 ```
 
-For example, to add the `github.com/fsnotify/fsnotify` package, run `make glide-get pkg=github.com/fsnotify/fsnotify`.
+For example, to add the `github.com/fsnotify/fsnotify` package, run `make dep-add pkg=github.com/fsnotify/fsnotify`.
