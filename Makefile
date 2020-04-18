@@ -1,5 +1,6 @@
+DEV_IMAGE := drawbridge
 DOCKER_COMPOSE ?= $(shell which docker-compose)
-DOCKER_COMPOSE_RUN := $(DOCKER_COMPOSE) run --rm drawbridge
+DOCKER_COMPOSE_DEV_RUN := $(DOCKER_COMPOSE) run --rm $(DEV_IMAGE)
 
 .SILENT: help
 help: ## Show this help message
@@ -11,26 +12,21 @@ help: ## Show this help message
 build-image: ## Build the docker image
 	$(DOCKER_COMPOSE) build
 
-install: build-image ## Install dependencies
-	$(DOCKER_COMPOSE) build
-	$(DOCKER_COMPOSE_RUN) glide install
-	$(DOCKER_COMPOSE_RUN) go install
-
 update: ## Update dependencies
 	rm -rf vendor
-	$(DOCKER_COMPOSE_RUN) glide update
+	$(DOCKER_COMPOSE_DEV_RUN) dep ensure
 
-glide-get: ## Add a new dependency to glide.yaml
-	$(DOCKER_COMPOSE_RUN) glide get ${pkg}
+dep-add: ## Add a new dependency to Gopkg.lock
+	$(DOCKER_COMPOSE_DEV_RUN) dep ensure -add ${pkg}
 
 build: ## Build and compile the source
-	$(DOCKER_COMPOSE_RUN) go build -o bin/drawbridge # This will go into /go/src/drawbridge/bin
+	$(DOCKER_COMPOSE_DEV_RUN) go build -o bin/drawbridge # This will go into /go/src/drawbridge/bin
 
-start: ## Start the service
-	$(DOCKER_COMPOSE) up
+start: ## Start the dev service
+	$(DOCKER_COMPOSE) run --service-ports --rm $(DEV_IMAGE) /go/bin/drawbridge /config/config.yaml
 
 test: ## Run the tests
-	$(DOCKER_COMPOSE_RUN) go test
+	$(DOCKER_COMPOSE_DEV_RUN) go test
 
 .PHONY: clean
 clean: ## Clean up any containers and images
